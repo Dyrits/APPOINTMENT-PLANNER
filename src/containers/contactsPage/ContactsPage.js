@@ -23,8 +23,8 @@ export const ContactsPage = ({contacts, addContact}) => {
     };
 
     useEffect(() => {
-        contacts.find(contact => contact.name === name) && setDuplicate(true);
-    }, [name]);
+        setDuplicate(contacts.some(contact => contact.name === name));
+    }, [name, contacts]);
 
     return (
         <div>
