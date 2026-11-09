@@ -8,7 +8,7 @@ The app keeps a list of contacts and lets the user schedule appointments, each l
 
 ### Built With
 
-- React (Create React App)
+- React 17 with Vite 8
 - React Router
 
 ## Getting Started
@@ -16,7 +16,7 @@ The app keeps a list of contacts and lets the user schedule appointments, each l
 Install the dependencies:
 
 ```bash
-npm install
+npm ci
 ```
 
 Start the development server:
@@ -31,8 +31,12 @@ No license file is present.
 
 ## Dependency verification
 
-Use Node.js 26 LTS. The November 3, 2026 update moves the old Create React App 4 toolchain to 5.0.1 while retaining React 17 and Router 5. Both npm and Yarn lockfiles were refreshed. The npm overrides and matching Yarn resolutions select patched Underscore and once versions, avoiding new advisory IDs introduced by the toolchain change.
+Use Node.js 26 LTS. The November 9, 2026 refresh replaces Create React App 5 with Vite 8 and Vitest 5, retaining React 17 and Router 5. `npm start` (or `npm run dev`) serves the app at http://localhost:3000; `npm run build` writes production assets to `build/`, and `npm run preview` previews that output locally. The HTML entry is now root-level `index.html`; JSX-bearing modules use `.jsx`.
 
-Fresh npm install from the lockfile, production build, and the new contact/appointment integration test pass. The Yarn dependency tree also passes that build and test. Browser checks cover adding a contact, rejecting a duplicate, changing to a different name, and creating an appointment; mobile layout was inspected. The duplicate flag now resets when the name changes, fixing a pre-existing case where entering a duplicate could prevent later valid contacts from being added.
+Both npm and Yarn 1.22.22 lockfiles are maintained. Use either `npm ci` or `yarn install --frozen-lockfile`, then the corresponding test and build commands. The package-manager field records the Yarn version for Yarn users; npm remains supported and separately verified.
 
-Local npm audit fell from 202 package findings (16 critical, 60 high) to 66 (0 critical, 10 high, 49 moderate, 7 low). Distinct advisory IDs fell from 181 to 22 with no new IDs. Yarn also reports the same 22 distinct advisory IDs, though its path counts differ. The old CRA toolchain still has known security findings and deprecation warnings, so this is a partial update, not a clean audit or a claim of long-term framework support. No deployment was performed. Contacts and appointments remain in-memory and disappear on page reload.
+The original npm lock was missing a YAML 2 dependency required by its existing graph, so its initial frozen install failed. After a local lock repair without application changes, the original production build and contact/appointment integration test passed. The refreshed standard frozen npm and Yarn installs, builds and integration test all pass on Node 26.13.0. Actual Chromium checks passed for the original build and both refreshed dependency trees: root redirect, adding contacts, duplicate-name recovery, appointment creation, route navigation, deep linking and state reset on reload. The refreshed Vite development server also renders both pages. A small contact-picker change moves the initial selection from an option attribute to the select's default value, preserving behavior and removing a React warning.
+
+At verification time npm audit reported zero findings, down from 26 affected-package findings in the original lockfile. Yarn audit also reported zero. This is a dependency scan, not a full security review. React 17 and Router 5 remain older software, and Vite's modern-browser defaults have not been checked against all browsers previously named by CRA's browserslist settings.
+
+No deployment or hosting setup was performed. A future static host must serve `index.html` for app routes such as `/contacts`. Contacts and appointments remain in-memory and disappear on page reload.

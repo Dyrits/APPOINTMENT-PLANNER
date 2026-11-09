@@ -26,3 +26,6 @@ yarn-error.log*
 
 # PHPStorm
 .idea
+# Local build and test output
+build/
+coverage/
